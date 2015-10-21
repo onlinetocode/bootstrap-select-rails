@@ -1,35 +1,99 @@
 # Bootstrap::Select::Rails
 
-Assets for https://github.com/silviomoreto/bootstrap-select - see it for details
+bootstrap-select-rails provides the [bootstrap-select](https://github.com/silviomoreto/bootstrap-select) JS and CSS as a Rails engine for use with the Rails asset pipeline.
 
-add to application.js and application.css something like
-
-    //= require bootstrap-select
-
-Also, you must require at least the *alert* and *dropdown* bootstrap components.
-For example, if using
-[bootstrap-sass](https://github.com/twbs/bootstrap-sass):
-
-    //= require bootstrap/alert
-    //= require bootstrap/dropdown
+See [bootstrap-select Documentation](https://silviomoreto.github.io/bootstrap-select) for more details and expanded usage.
 
 ## Installation
 
-Add this line to your application's Gemfile:
+Add this line to your Gemfile:
 
-    gem 'bootstrap-select-rails'
+```ruby
+gem 'bootstrap-select-rails'
+```
 
-And then execute:
-
-    $ bundle
+And then run `bundle install`.
 
 Or install it yourself as:
 
-    $ gem install bootstrap-select-rails
-
+`$ gem install bootstrap-select-rails`
+    
 ## Usage
 
-TODO: Write usage instructions here
+In your `application.js` file include the base js file:
+
+```js
+//= require bootstrap-select
+```
+
+and in your `application.css` file include the css:
+
+```css
+/*
+= require bootstrap-select    
+*/
+```
+
+Add any needed locale files to your `application.js` like:
+```js
+//= require bootstrap-select
+//= require bootstrap-select/i18n/defaults-de_DE
+```
+
+Restart your webserver if it was previously running.
+
+### SCSS/SASS Support
+If you use [SCSS](http://sass-lang.com/documentation/file.SASS_REFERENCE.html), add this to your `application.scss` file:
+```scss
+@import "bootstrap-select";
+```
+    
+or if you use [SASS indented style](http://sass-lang.com/docs/yardoc/file.INDENTED_SYNTAX.html), add this to your `application.sass` file:
+    
+```SASS
+@import bootstrap-select
+```
+
+## Views/Helpers
+
+Add the `selectpicker` class to your `<select>` element like:
+```ruby
+= select :post, :category, Post::CATEGORIES, class: 'selectpicker'
+```
+
+### Options/Configuration
+
+Additional `bootstrap-select` options are supplied through HTML attributes:
+```ruby
+= select :post, :category, Post::CATEGORIES, class: 'selectpicker', title: 'Please choose a category&hellip;'.html_safe, data: { live_search: true }
+```
+Checkout the [documentation](https://silviomoreto.github.io/bootstrap-select) for more configuration.
+
+## Notes/Troubleshooting
+
+### Required Bootstrap Components
+You must require at least the *alert* and *dropdown* bootstrap components.
+For example, if using
+[bootstrap-sass gem](https://github.com/twbs/bootstrap-sass):
+
+```js
+//= require bootstrap/alert
+//= require bootstrap/dropdown
+```
+
+### Turbolinks trouble
+Using turbolinks, the bootstrap-select component will not be initialized after page load and must be injected into the `turbolinks` `page:load` callback like:
+
+`application.js`
+```js
+var ready;
+
+ready = function() {
+  $('.selectpicker').selectpicker 'render'
+};
+
+$(document).on('page:load', ready);
+```
 
 ## Contributing
 
